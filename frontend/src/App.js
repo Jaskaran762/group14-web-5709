@@ -18,6 +18,11 @@ import Contactus from './Components/contactus/Contactus';
 import Faq from './Components/faq/Faq';
 import LandingPage from "./Components/landing/LandingPage";
 
+import Login from './Components/proversion/Login';
+import Register from './Components/proversion/Register';
+import Success from './Components/proversion/Success';
+import Cancel from './Components/proversion/Cancel';
+
 function App() {
   return (
     <div>
@@ -32,13 +37,18 @@ function App() {
         <Route path="/okr" element={<Home />} />
         <Route path="/add-objective" element={<AddObjective />} />
         <Route path="/budget-planner" element={<BasicPie />} />
-        <Route path="/whatsnew" element={<WhatsNew />} />
         <Route path="/contactus" element={<Contactus />} />
         <Route path="/faq" element={<Faq />} />
+        <Route path="/whatsnew" element={<WhatsNew />} />
         <Route path="/subscription-plans" element={<SubscriptionPlans />} />
         <Route path="/checkout" element={<PaymentForm />} />
         <Route path="/home" element={<LandingPage />} />
         <Route path="*" element={<Navigate to="/home" replace />} />
+
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/success" element={<Success />} />
+          <Route path="/cancel" element={<Cancel />} />
       </Routes>
     </div>
   );
