@@ -11,7 +11,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use('/', userRoutes);
 app.use('/expense', expenseRoutes);
-app.use('/', documentUploadRoutes)
+app.use('/documents', documentUploadRoutes)
 
 connectDB();
 
