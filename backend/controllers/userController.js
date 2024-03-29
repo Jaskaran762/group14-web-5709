@@ -65,6 +65,7 @@ const userLogin = async (req, res) => {
         console.log(process.env.JWT_ACCESS_KEY)
         jwt.sign( {userId: user.id}, process.env.JWT_ACCESS_KEY, { expiresIn: '40h' }, (err, token) => {
             if (err) throw err;
+            
             res.status(200).json({
                 message: "login successful",
                 id: user.id,
