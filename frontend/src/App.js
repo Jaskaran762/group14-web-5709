@@ -19,6 +19,7 @@ import Faq from './Components/faq/Faq';
 import LandingPage from "./Components/landing/LandingPage";
 import Signup from "./pages/signup/signup";
 import Login from "./pages/login/login";
+import Profile from "./pages/profile/userProfile";
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
       <Routes>
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/profile" element={<Profile />} />
         <Route path="/listexpenses/" element={<ListExpenses/>}/>
         <Route path="/addexpense" element={<AddExpense/>}/>
         <Route path="/viewexpense/:expenseId" element={<ViewExpense/>}/>
@@ -42,7 +44,6 @@ function App() {
         <Route path="/subscription-plans" element={<SubscriptionPlans />} />
         <Route path="/checkout" element={<PaymentForm />} />
         <Route path="/home" element={<LandingPage />} />
-        
         <Route path="*" element={<Navigate to="/home" replace />} />
       </Routes>
     </div>
