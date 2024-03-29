@@ -1,51 +1,80 @@
 import React, { useEffect, useState } from 'react'
-import firebase from "../../firebase/firebaseConfig";
+// import firebase from "../../firebase/firebaseConfig";
 import { useNavigate } from "react-router-dom";
 
 const Success = () => {
  const navigate = useNavigate();
-  const [userId, setUserId] = useState("");
+  // const [userId, setUserId] = useState("");
   const [sessionId, setSessionId] = useState("");
 
-  useEffect(()=>{
-    firebase.auth().onAuthStateChanged((user)=> {
-      if(user){
-        setUserId(user.uid)
-        const userRef = firebase.database().ref("users/" + user.uid);
-        userRef.on('value', (snapshot) => {
-          const user = snapshot.val();
-          if(user){
-            setSessionId(user.subscription.sessionId || "")
-          }
-        })
-      }
-    })
+  // useEffect(()=>{
+  //   firebase.auth().onAuthStateChanged((user)=> {
+  //     if(user){
+  //       setUserId(user.uid)
+  //       const userRef = firebase.database().ref("users/" + user.uid);
+  //       userRef.on('value', (snapshot) => {
+  //         const user = snapshot.val();
+  //         if(user){
+  //           setSessionId(user.subscription.sessionId || "")
+  //         }
+  //       })
+  //     }
+  //   })
 
-  }, [userId, sessionId]);
+  // }, [userId, sessionId]);
 
-  console.log("sessionId is: ", sessionId)
+  // console.log("sessionId is: ", sessionId)
+
+  // const handlePaymentSuccess = () => {
+  //   fetch("http://localhost:5000/api/v1/payment-success", {
+  //     method:"POST",
+  //     headers:{
+  //       "Content-Type":"application/json"
+  //     },
+  //     body: JSON.stringify({sessionId: sessionId, firebaseId: userId})
+  //   })
+  //   .then(res => {
+  //     if(res.ok) return res.json();
+  //     return res.json().then(json => Promise.reject(json));
+  //   })
+  //   .then(data => {
+  //     console.log("data.message:: ", data.message);
+  //     navigate("/")
+  //   })
+  //   .catch(e => {
+  //     console.log("error is ", e);
+  //   });
+  // }
+
+  useEffect(() => {
+    // Fetch sessionId from localStorage or wherever it's stored
+    const storedSessionId = localStorage.getItem('sessionId');
+    setSessionId(storedSessionId);
+  }, []);
 
   const handlePaymentSuccess = () => {
+    const token = localStorage.getItem('token'); // Assuming you store the JWT token in localStorage
+    console.log("Token ------- ",token)
     fetch("http://localhost:5000/api/v1/payment-success", {
-      method:"POST",
-      headers:{
-        "Content-Type":"application/json"
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": token // Include JWT token in the Authorization header
       },
-      body: JSON.stringify({sessionId: sessionId, firebaseId: userId})
+      body: JSON.stringify({ sessionId: sessionId })
     })
     .then(res => {
-      if(res.ok) return res.json();
+      if (res.ok) return res.json();
       return res.json().then(json => Promise.reject(json));
     })
     .then(data => {
       console.log("data.message:: ", data.message);
-      navigate("/")
+      navigate("/");
     })
     .catch(e => {
       console.log("error is ", e);
     });
   }
-
 
   return (
     <div className='m-0 p-0'>
