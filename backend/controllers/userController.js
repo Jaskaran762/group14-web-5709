@@ -84,6 +84,21 @@ const getUserProfile = async (req, res) => {
         if (!user) {
             return res.status(404).json({ message: 'User with this email not found' });
         }
+        // Check if the user is subscribed and the subscription end date is after the current date
+        console.log("user controller user.isSubscribed", user.isSubscribed);
+        if (user.isSubscribed) {
+            const subscriptionEndDate = moment(user.subscriptionEndDate);
+            const currentDate = moment();
+            console.log("subscriptionEndDate userController", subscriptionEndDate)
+            console.log("currentDate userController", currentDate)
+            console.log("subscriptionEndDate.isAfter(currentDate) userController", subscriptionEndDate.isAfter(currentDate))
+            if (!subscriptionEndDate.isAfter(currentDate)) {
+                // If the subscription end date is not after the current date, set isSubscribed to false
+                user.isSubscribed = false;
+                await user.save();
+            }
+        }
+
         res.status(200).json({ user });
     } catch (err) {
         console.error(err.message);
