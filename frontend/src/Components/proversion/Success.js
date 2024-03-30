@@ -1,56 +1,104 @@
-import React, { useEffect, useState } from 'react'
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Typography, Button, Box } from '@mui/material';
+import { styled } from '@mui/system';
+
+const StyledButton = styled(Button)({
+  backgroundColor: '#009C96',
+  color: 'white',
+  '&:hover': {
+    backgroundColor: '#008a84',
+  },
+});
 
 const Success = () => {
- const navigate = useNavigate();
-const [sessionId, setSessionId] = useState("");
+  const navigate = useNavigate();
+  const [sessionId, setSessionId] = useState('');
+  const [fadeIn, setFadeIn] = useState(false);
 
   useEffect(() => {
     const storedSessionId = localStorage.getItem('sessionId');
     setSessionId(storedSessionId);
+    // Trigger fadeIn effect after component mounts
+    setTimeout(() => {
+      setFadeIn(true);
+    }, 100);
   }, []);
 
   const handlePaymentSuccess = () => {
-    const token = localStorage.getItem('token'); 
-    console.log("Token ------- ",token)
-    fetch("http://localhost:5000/api/v1/payment-success", {
-      method: "POST",
+    const token = localStorage.getItem('token');
+    console.log('Token ------- ', token);
+    fetch('http://localhost:5000/api/v1/payment-success', {
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}` 
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({ sessionId: sessionId })
+      body: JSON.stringify({ sessionId: sessionId }),
     })
-    .then(res => {
-      if (res.ok) return res.json();
-      return res.json().then(json => Promise.reject(json));
-    })
-    .then(data => {
-      console.log("data.message:: ", data.message);
-      navigate("/");
-    })
-    .catch(e => {
-      console.log("error is ", e);
-    });
-  }
+      .then((res) => {
+        if (res.ok) return res.json();
+        return res.json().then((json) => Promise.reject(json));
+      })
+      .then((data) => {
+        console.log('data.message:: ', data.message);
+        navigate('/');
+      })
+      .catch((e) => {
+        console.log('error is ', e);
+      });
+  };
 
   return (
-    <div className='m-0 p-0'>
-      <div className='w-full min-h-[80vh] flex flex-col justify-center items-center'>
-        <div className='my-10 text-green-600 text-2xl mx-auto flex flex-col justify-center items-center'>
-          
-          <h3 className='text-4xl pt-20 lg:pt-0 font-bold text-center text-slate-700'>
-            Payment Successful
-          </h3>
-          <button onClick={() => handlePaymentSuccess()}
-          className='w-40 uppercase bg-[#009C96] text-white text-xl my-16 px-2 py-2 rounded'
-          >
-            Proceed
-          </button>
-        </div>
-      </div>
-    </div>
-  )
-}
+    <Box
+      display="flex"
+      alignItems="center"
+      justifyContent="center"
+      minHeight="80vh"
+      flexDirection="column"
+      style={{
+        animation: fadeIn ? 'fadeIn 0.5s ease-in-out forwards' : 'none',
+      }}
+    >
+      <Typography
+        variant="h3"
+        textAlign="center"
+        color="slate.700"
+        mb={4}
+        style={{
+          transition: 'opacity 0.5s ease-in-out',
+          opacity: fadeIn ? 1 : 0,
+        }}
+      >
+        Payment Successful
+      </Typography>
+      <Typography
+        variant="h5"
+        textAlign="center"
+        color="black"
+        mb={4}
+        style={{
+          transition: 'opacity 0.5s ease-in-out',
+          opacity: fadeIn ? 1 : 0,
+        }}
+      >
+        Welcome to the PRO version
+      </Typography>
+      <StyledButton
+        variant="contained"
+        size="large"
+        onClick={handlePaymentSuccess}
+        className="uppercase"
+        style={{
+          transition: 'opacity 0.5s ease-in-out',
+          opacity: fadeIn ? 1 : 0,
+        }}
+      >
+        Proceed
+      </StyledButton>
+    </Box>
+  );
+};
 
-export default Success
+export default Success;
+

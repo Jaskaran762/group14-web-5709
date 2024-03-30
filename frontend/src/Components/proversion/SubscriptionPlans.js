@@ -52,8 +52,9 @@ const SubscriptionPlans = () => {
   return (
     <div className="subscription-plans">
       <h1>Choose a Collaborative Plan</h1>
+      <div className="plans-container">
       {data.map((item, idx) => (
-        <div className="plans-container">
+        
         <div key={idx} className="plan-card">
           <h2>{item.title}</h2>
           <p>${item.price}</p>
@@ -63,9 +64,10 @@ const SubscriptionPlans = () => {
             Pay Now
           </button>
         </div>
-      </div>
+      
 
       ))}
+      </div>
       
     </div>
   );
