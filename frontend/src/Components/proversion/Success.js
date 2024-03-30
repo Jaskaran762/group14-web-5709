@@ -59,7 +59,7 @@ const Success = () => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": token // Include JWT token in the Authorization header
+        "Authorization": `Bearer ${token}` // Include JWT token in the Authorization header
       },
       body: JSON.stringify({ sessionId: sessionId })
     })

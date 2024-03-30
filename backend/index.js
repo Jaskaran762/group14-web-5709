@@ -1,24 +1,24 @@
-require("dotenv").config()
-// const admin = require("firebase-admin");
-// const serviceAccount = require("./serviceAccountKey.json")
-const express = require("express");
-const app = express()
-const cors = require("cors");
-const bodyParser = require("body-parser");
-const moment = require("moment");
+const userAuth = require('./middleware/auth')
+const express = require('express');
+const cors = require('cors')
+const app = express();
+const port = 5000;
 const connectDB = require('./utils/dbConnection');
-connectDB();
-
-app.use(express.json())
-const expenseRoutes=require('./routes/expenseRoutes');
-const userRoutes=require('./routes/userRoutes');
-const userAuth = require("./middleware/auth");
+const expenseRoutes = require('./routes/expenseRoutes');
+const userRoutes = require('./routes/userRoutes');
+const documentUploadRoutes = require('./routes/documentUploadRoutes');
+const moment=require('moment');
+const bodyParser=require('body-parser');
+app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use('/expense',expenseRoutes);
-app.use('/user',userRoutes);
 
 
-const port = 5000
+app.use('/', userRoutes);
+app.use('/expense', expenseRoutes);
+app.use('/documents', documentUploadRoutes)
+
+
+
 
 
 app.use(bodyParser.json())
@@ -127,8 +127,8 @@ app.post("/api/v1/payment-success", userAuth, async (req, res) => {
         res.send(error);
       }
     });
-  
-         
+connectDB();
+
 app.listen(port, () => {
-    console.log(`Now listening on port ${port}`);
-})
+    console.log("Server running on port", port);
+});

@@ -1,22 +1,16 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/userModel');
-
+const dotenv = require("dotenv");
+dotenv.config();
 
 const userSignup = async (req, res) => {
-    console.log("Received signup request:", req.body);
     const { firstName, lastName, email, contactNo, password } = req.body;
     const { dateOfBirth, income } = "";
-    console.log("firstName:", firstName);
-        console.log("lastName:", lastName);
-        console.log("email:", email);
-        console.log("contactNo:", contactNo);
-        console.log("password:", password);
 
     try {
 
         let user = await User.findOne({ email });
-        console.log("req.body: ", req.body);
         if (user) {
             return res.status(400).json({ message: 'User already exists' });
         }
@@ -38,13 +32,13 @@ const userSignup = async (req, res) => {
         await user.save();
 
         jwt.sign({
-            id: user.id
-        }, 'userAccessKey',
+            userId: user.id
+        }, process.env.JWT_ACCESS_KEY,
         { 
             expiresIn: '40h' 
         }, (err) => {
             if (err) throw err;
-            res.json({ message: 'Signup successful' });
+            res.status(200).json({ message: 'Signup successful' });
         });
     } catch (err) {
         console.error(err.message);
@@ -68,11 +62,12 @@ const userLogin = async (req, res) => {
             return res.status(400).json({ message: 'Invalid password' });
         }
 
-
-        jwt.sign( {id: user.id}, 'userAccessKey', { expiresIn: '40h' }, (err, token) => {
+        console.log(process.env.JWT_ACCESS_KEY)
+        jwt.sign( {userId: user.id}, process.env.JWT_ACCESS_KEY, { expiresIn: '40h' }, (err, token) => {
             if (err) throw err;
-            res.json({
+            res.status(200).json({
                 message: "login successful",
+                id: user.id,
                 token
             });
         });
@@ -82,7 +77,23 @@ const userLogin = async (req, res) => {
     }
 };
 
+const getUserProfile = async (req, res) => {
+    try {
+        const user = await User.findById(req.params.id);
+
+        if (!user) {
+            return res.status(404).json({ message: 'User with this email not found' });
+        }
+        res.status(200).json({ user });
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
+    }
+};
+
+
 module.exports = {
     userSignup,
-    userLogin
+    userLogin,
+    getUserProfile
 };
