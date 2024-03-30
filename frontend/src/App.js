@@ -18,8 +18,6 @@ import Contactus from './Components/contactus/Contactus';
 import Faq from './Components/faq/Faq';
 import LandingPage from "./Components/landing/LandingPage";
 
-import Login from './Components/proversion/Login';
-import Register from './Components/proversion/Register';
 import Success from './Components/proversion/Success';
 import Cancel from './Components/proversion/Cancel';
 
@@ -45,8 +43,6 @@ function App() {
         <Route path="/home" element={<LandingPage />} />
         <Route path="*" element={<Navigate to="/home" replace />} />
 
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
         <Route path="/success" element={<Success />} />
           <Route path="/cancel" element={<Cancel />} />
       </Routes>

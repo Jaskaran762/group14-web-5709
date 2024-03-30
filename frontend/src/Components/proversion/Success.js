@@ -1,65 +1,23 @@
 import React, { useEffect, useState } from 'react'
-// import firebase from "../../firebase/firebaseConfig";
 import { useNavigate } from "react-router-dom";
 
 const Success = () => {
  const navigate = useNavigate();
-  // const [userId, setUserId] = useState("");
-  const [sessionId, setSessionId] = useState("");
-
-  // useEffect(()=>{
-  //   firebase.auth().onAuthStateChanged((user)=> {
-  //     if(user){
-  //       setUserId(user.uid)
-  //       const userRef = firebase.database().ref("users/" + user.uid);
-  //       userRef.on('value', (snapshot) => {
-  //         const user = snapshot.val();
-  //         if(user){
-  //           setSessionId(user.subscription.sessionId || "")
-  //         }
-  //       })
-  //     }
-  //   })
-
-  // }, [userId, sessionId]);
-
-  // console.log("sessionId is: ", sessionId)
-
-  // const handlePaymentSuccess = () => {
-  //   fetch("http://localhost:5000/api/v1/payment-success", {
-  //     method:"POST",
-  //     headers:{
-  //       "Content-Type":"application/json"
-  //     },
-  //     body: JSON.stringify({sessionId: sessionId, firebaseId: userId})
-  //   })
-  //   .then(res => {
-  //     if(res.ok) return res.json();
-  //     return res.json().then(json => Promise.reject(json));
-  //   })
-  //   .then(data => {
-  //     console.log("data.message:: ", data.message);
-  //     navigate("/")
-  //   })
-  //   .catch(e => {
-  //     console.log("error is ", e);
-  //   });
-  // }
+const [sessionId, setSessionId] = useState("");
 
   useEffect(() => {
-    // Fetch sessionId from localStorage or wherever it's stored
     const storedSessionId = localStorage.getItem('sessionId');
     setSessionId(storedSessionId);
   }, []);
 
   const handlePaymentSuccess = () => {
-    const token = localStorage.getItem('token'); // Assuming you store the JWT token in localStorage
+    const token = localStorage.getItem('token'); 
     console.log("Token ------- ",token)
     fetch("http://localhost:5000/api/v1/payment-success", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}` // Include JWT token in the Authorization header
+        "Authorization": `Bearer ${token}` 
       },
       body: JSON.stringify({ sessionId: sessionId })
     })

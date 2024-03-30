@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react';
 import './SubscriptionPlans.css';
-// import firebase from "../../firebase/firebaseConfig";
 
 const data = [
   {
@@ -16,22 +15,8 @@ const data = [
 ];
 
 const SubscriptionPlans = () => {
-  // const [userId, setUserId] = useState("");
   const [token, setToken] = useState("");
 
-  // useEffect(() => {
-  //   firebase.auth().onAuthStateChanged((user) => {
-  //     if (user) {
-  //       setUserId(user.uid);
-  //       const userRef = firebase.database().ref("users/" + user.uid);
-  //       userRef.on("value", (snapshot) => {
-  //         const userVal = snapshot.val();
-  //       });
-  //     } else {
-  //       setUserId("");
-  //     }
-  //   });
-  // }, [userId]);
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
@@ -40,28 +25,6 @@ const SubscriptionPlans = () => {
     }
     console.log("StoredToken --------> ", storedToken)
   }, []);
-
-  // const checkout = (plan) => {
-  //   fetch("http://localhost:5000/api/v1/create-subscription-checkout-session", {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //     mode: "cors",
-  //     body: JSON.stringify({ plan: plan, customerId: userId }),
-  //   })
-  //     .then((res) => {
-  //       if (res.ok) return res.json();
-  //       console.log("response is: ", res);
-  //       return res.json().then((json) => Promise.reject(json));
-  //     })
-  //     .then(({ session }) => {
-  //       window.location = session.url;
-  //     })
-  //     .catch((e) => {
-  //       console.log("error is:", e);
-  //     });
-  // };
 
   const checkout = (plan) => {
     fetch("http://localhost:5000/api/v1/create-subscription-checkout-session", {
