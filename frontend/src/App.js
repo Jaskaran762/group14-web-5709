@@ -17,6 +17,9 @@ import PaymentForm from './Components/proversion/PaymentForm';
 import Contactus from './Components/contactus/Contactus';
 import Faq from './Components/faq/Faq';
 import LandingPage from "./Components/landing/LandingPage";
+// okr
+import OkrHome from './Components/okr/js/Home';
+import AddOkr from './Components/okr/js/AddObjective';
 
 function App() {
   return (
@@ -39,6 +42,9 @@ function App() {
         <Route path="/checkout" element={<PaymentForm />} />
         <Route path="/home" element={<LandingPage />} />
         <Route path="*" element={<Navigate to="/home" replace />} />
+        {/* okr */}
+        <Route path="/okrhome" element={<OkrHome />} />
+        <Route path="/add-okr" element={<AddOkr />} />
       </Routes>
     </div>
   );
