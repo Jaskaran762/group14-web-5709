@@ -33,7 +33,7 @@ const Profile = () => {
     };
 
     axios
-      .get(`http://localhost:3000/user/${userId}`, config)
+      .get(`${process.env.REACT_APP_BACKEND_URL}/user/${userId}`, config)
       .then((response) => {
         setUser(response.data.user);
         setEditedUser(response.data.user);
@@ -105,7 +105,7 @@ const Profile = () => {
       };
 
       axios
-        .put(`http://localhost:3000/user/update/${userId}`, editedUser, config)
+        .put(`${process.env.REACT_APP_BACKEND_URL}/user/update/${userId}`, editedUser, config)
         .then((response) => {
           console.log("Profile updated:", response);
           setUser(editedUser);

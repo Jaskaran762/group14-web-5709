@@ -19,7 +19,7 @@ const Login = () => {
 
     if (Object.keys(newErrors).length === 0) {
         axios
-        .post("http://localhost:3000/login", {
+        .post(`${process.env.REACT_APP_BACKEND_URL}/login`, {
           email: email,
           password: password,
         })

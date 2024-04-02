@@ -59,7 +59,7 @@ const Signup = () => {
 
     if (Object.keys(newErrors).length === 0) {
       axios
-        .post("http://localhost:3000/signup", {
+        .post(`${process.env.REACT_APP_BACKEND_URL}/signup`, {
           firstName: firstName,
           lastName: lastName,
           email: email,
