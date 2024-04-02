@@ -43,6 +43,10 @@ function App() {
         <Route path="/checkout" element={<PaymentForm />} />
         <Route path="/home" element={<LandingPage />} />
         <Route path="*" element={<Navigate to="/home" replace />} />
+
+        <Route path="/success" element={<Success />} />
+          <Route path="/cancel" element={<Cancel />} />
+        <Route path="/addDocument" element={<AddDocumentForm/>}/>
       </Routes>
     </div>
   );
