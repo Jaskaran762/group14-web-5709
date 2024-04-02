@@ -11,9 +11,12 @@ import {
   Upload,
   Typography
 } from 'antd';
-import { useState } from 'react';
+import { useState,useEffect} from 'react';
 import Swal from "sweetalert2";
 import moment from 'moment';
+import axios from 'axios'
+import { useNavigate,useParams } from 'react-router-dom';
+import { Spin } from 'antd';
 
 const { TextArea } = Input;
 const { Title } = Typography;
@@ -34,24 +37,60 @@ const successNotification = () => {
 }
 
 const EditExpense = () => {
-    const [expense, setExpense] = useState({
-        expenseId: '1',
-        expenseName: 'Test Expense',
-        expenseType: 'received',
-        expenseAmount: 250,
-        expenseDate:moment(),
-        paymentMedium: 'cash',
-        description: `It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English.`,
-        attachment: null,
-        expenseCategory: 'other'
-    });
-  const onFinish = (values) => {
+    const [expense, setExpense] = useState({});
+    const [isLoading,setLoading]=useState(true);
+    const { expenseId } = useParams();
+    const navigate = useNavigate();
+    const headers = {
+      'Authorization': `Bearer ${localStorage.getItem("token")}`,
+      'Content-Type': 'application/json'
+  }
+  console.log(expense)
+  const errorNotification = (message) => {
+      Swal.fire({
+          title: "Expense did not retireved!",
+          text: message,
+          icon: "error"
+      })
+  }
+  useEffect(() => {
+      const fetchExpense = async () => {
+          try {
+              let res = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/expense/get/${expenseId}`, { headers });
+              if (res.data.isSuccess) {
+                res.data.expense.expenseDate = moment(res.data.expense.expenseDate);
+                  setExpense(res.data.expense)
+                  setLoading(false)
+              } else {
+                  throw new Error(res.data.message);
+              }
+          } catch (err) {
+              errorNotification(err.message);
+          }
+      }
+      fetchExpense()
+  }, [])
+  const onFinish = async(values) => {
     console.log('Received values:', values);
-    successNotification();
+    try{
+    let res = await axios.put(`${process.env.REACT_APP_BACKEND_URL}/expense/update/${expenseId}`,values, { headers });
+    if(res.data.isSuccess){
+      successNotification();
+    } else {
+      throw new Error(res.data.message);
+    }
+  } catch(err){
+    errorNotification(err.message);
+  }
+  navigate('/listexpenses');
+
   };
 
   return (
     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '80vh' }}>
+    {isLoading ? (
+      <Spin size="large" />
+    ) : (
       <Form
         labelCol={{
           span: 8,
@@ -68,7 +107,7 @@ const EditExpense = () => {
           backgroundColor: '#f9f9f9',
         }}
         onFinish={onFinish} 
-        initialValues={expense} // Fill the form with existing expense details
+        initialValues={expense}
       >
         <div style={{ textAlign: 'center', marginBottom: '20px' }}>
           <Title style={{ color: '#4c4b42' }}>Edit Expense</Title>
@@ -96,10 +135,10 @@ const EditExpense = () => {
         <Form.Item label="Date" name="expenseDate" rules={[{ required: true, message: 'Please select date' }]}>
           <DatePicker style={{ width: '100%' }} />
         </Form.Item>
-        <Form.Item label="Description" name="description">
+        <Form.Item label="Description" name="expenseDescription">
           <TextArea rows={4} style={{ width: '100%' }} />
         </Form.Item>
-        <Form.Item label="Attach" name="attachment" valuePropName="fileList" getValueFromEvent={normFile}>
+        <Form.Item label="Attach" name="expenseAttachment" valuePropName="fileList" getValueFromEvent={normFile}>
           <Upload action="/upload.do" listType="picture-card">
             <button
               style={{
@@ -135,8 +174,9 @@ const EditExpense = () => {
         <div style={{ textAlign: 'center', marginTop: '20px' }}>
           <Button type="primary" htmlType="submit" style={{ backgroundColor: '#4c4b42' }}>Update</Button>
         </div>
-      </Form>
+      </Form>)}
     </div>
+    
   );
 };
 
