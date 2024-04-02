@@ -1,68 +1,39 @@
-import React, { useState,useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import './ListExpenses.css'
-import { useNavigate} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import Swal from "sweetalert2";
+import axios from "axios";
 const ListExpenses = () => {
-    const [expenses, setExpenses] = useState([
-        {
-            expenseId: '1',
-            expenseName: 'test 1',
-            amount: 200,
-            expenseType: 'paid',
-            date: new Date("2023-12-17T03:24:00"),
-            category: 'grocery'
-        },
-        {
-            expenseId: '2',
-            expenseName: 'test 1',
-            amount: 200,
-            expenseType: 'received',
-            date: new Date("2023-12-21T00:00:00"),
-            category: 'food'
-        },
-        {
-            expenseId: '3',
-            expenseName: 'shirt',
-            amount: 200,
-            expenseType: 'paid',
-            date: new Date("2023-12-21T00:00:00"),
-            category: 'other'
-        },
-        {
-            expenseId: '4',
-            expenseName: 'New',
-            amount: 200,
-            expenseType: 'paid',
-            date: new Date("2023-11-19T00:00:00"),
-            category: 'other'
-        },
-        {
-            expenseId: '5',
-            expenseName: 'test 1',
-            amount: 85,
-            expenseType: 'paid',
-            date: new Date("2023-11-17T00:00:00"),
-            category: 'food'
-        },
-        {
-            expenseId: '6',
-            expenseName: 'test 1',
-            amount: 20,
-            expenseType: 'received',
-            date: new Date("2023-02-14T00:00:00"),
-            category: 'entertainment'
-        },
-        {
-            expenseId: '7',
-            expenseName: 'test 1',
-            amount: 200,
-            expenseType: 'paid',
-            date: new Date("2024-01-12T00:00:00"),
-            category: 'food'
+    const [expenses, setExpenses] = useState([])
+    const errorNotification = (message) => {
+        Swal.fire({
+            title: "Expenses did not retireved!",
+            text: message,
+            icon: "error"
+        })
+    }
+    useEffect(() => {
+        const fetchAllExpenses = async () => {
+            try {
+                const headers = {
+                    'Authorization': `Bearer ${localStorage.getItem("token")}`,
+                    'Content-Type': 'application/json'
+                }
+                let res = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/expense/getall`, { headers });
+                if (res.data.isSuccess) {
+                    setExpenses(res.data.expenses)
+                } else {
+                    throw new Error(res.data.message);
+                }
+            } catch (err) {
+                errorNotification(err.message);
+            }
         }
-    ])
-        const handleClick = (expenseId) => {
-            navigate(`/viewexpense/${expenseId}`);
-        };
+        fetchAllExpenses()
+    }, [])
+    const handleClick = (expenseId) => {
+        navigate(`/viewexpense/${expenseId}`);
+    };
     const [searchTerm, setSearchTerm] = useState('');
     const [sortBy, setSortBy] = useState('date');
     const [filterByType, setFilterByType] = useState('');
@@ -101,7 +72,7 @@ const ListExpenses = () => {
     const handleCategoryFilterChange = (e) => {
         setFilterByCategory(e.target.value);
     };
-    
+
     return (
         <div className="expenses-container">
             <h1>Your Expenses</h1>
@@ -132,13 +103,13 @@ const ListExpenses = () => {
             <div className="expense-list">
                 <ul className="expenses-list">
                     {sortedExpenses.map(expense => (
-                         <li className={`expense-item ${expense.expenseType === 'paid' ? 'paid' : 'received'}`} key={expense.expenseId} onClick={()=>handleClick(expense.expenseId)}>
-                         <div>{expense.expenseName}</div>
-                         <div>{expense.amount}</div>
-                         <div>{expense.expenseType}</div>
-                         <div>{expense.date.toLocaleDateString()}</div>
-                         <div>{expense.category}</div>
-                     </li>
+                        <li className={`expense-item ${expense.expenseType === 'paid' ? 'paid' : 'received'}`} key={expense._id} onClick={() => handleClick(expense._id)}>
+                            <div>{expense.expenseName}</div>
+                            <div>{expense.expenseAmount}</div>
+                            <div>{expense.expenseType}</div>
+                            <div>{new Date(expense.expenseDate).toLocaleDateString()}</div>
+                            <div>{expense.expenseCategory}</div>
+                        </li>
                     ))}
                 </ul>
             </div>

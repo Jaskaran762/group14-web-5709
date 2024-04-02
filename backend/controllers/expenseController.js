@@ -69,7 +69,7 @@ const getExpensebyId = async(req,res) => {
             return res.status(200).send({
                 isSuccess: true,
                 message: 'Expense retrived',
-                expenses: expenseUser
+                expense: expenseUser
             })
         } else {
             return res.status(403).send({
