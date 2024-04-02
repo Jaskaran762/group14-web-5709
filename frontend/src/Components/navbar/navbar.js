@@ -12,9 +12,12 @@ import {
   Divider,
   ListItemButton,
   ListItemText,
+  Badge
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import { Link } from "react-router-dom";
+import Notification from '../notifications/Notification';
+import NotificationsIcon from '@mui/icons-material/Notifications';
 
 const navItems = [
   { title: "Home", path: "/home" },
@@ -26,6 +29,23 @@ const drawerWidth = 240;
 export default function Navbar(props) {
   const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [openNotificationPopup, setOpenNotificationPopup] = React.useState(false); // State for notification popup
+  const [notifications] = React.useState([
+      { message: "Notification 1" },
+      { message: "Notification 2" },
+      { message: "Notification 3" },
+      { message: "Notification 4" },
+      { message: "Notification 5" },
+      { message: "Notification 6" },
+      { message: "Notification 7" },
+      { message: "Notification 8" },
+  ]);
+
+  const [hasNewNotifications, setHasNewNotifications] = React.useState(true);
+  const handleNotificationClick = () => {
+    setOpenNotificationPopup(true);
+    setHasNewNotifications(false); 
+  };
 
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState);
@@ -91,6 +111,18 @@ export default function Navbar(props) {
               </Button>
             ))}
           </Box>
+          <IconButton
+            color="inherit"
+            onClick={handleNotificationClick}>
+            <Badge color="error" variant="dot" invisible={!hasNewNotifications}>
+              <NotificationsIcon />
+            </Badge>
+          </IconButton>
+          <Notification
+              open={openNotificationPopup}
+              onClose={() => setOpenNotificationPopup(false)}
+              notifications={notifications}
+          />
         </Toolbar>
       </AppBar>
       <nav>

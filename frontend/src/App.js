@@ -5,7 +5,7 @@ import ViewExpense from "./Components/expense-management/ViewExpense";
 import EditExpense from "./Components/expense-management/EditExpense";
 import './App.css';
 //import Home from './home'; Dhrumil home
-import Chat from './chat/chat';
+import Chat from './chat/Chatbot';
 import Home from './Components/Home';
 import AddObjective from './Components/AddObjective';
 import BasicPie from './Components/budget-planner/budget-planner';
@@ -22,6 +22,7 @@ function App() {
   return (
     <div>
       <Navbar/>
+      <Chat/>
       <Routes>
         <Route path="/listexpenses/" element={<ListExpenses/>}/>
         <Route path="/addexpense" element={<AddExpense/>}/>
