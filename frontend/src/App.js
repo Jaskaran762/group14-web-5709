@@ -17,6 +17,9 @@ import PaymentForm from './Components/proversion/PaymentForm';
 import Contactus from './Components/contactus/Contactus';
 import Faq from './Components/faq/Faq';
 import LandingPage from "./Components/landing/LandingPage";
+import Signup from "./pages/signup/signup";
+import Login from "./pages/login/login";
+import Profile from "./pages/profile/userProfile";
 
 import Success from './Components/proversion/Success';
 import Cancel from './Components/proversion/Cancel';
@@ -26,6 +29,9 @@ function App() {
     <div>
       <Navbar/>
       <Routes>
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/profile" element={<Profile />} />
         <Route path="/listexpenses/" element={<ListExpenses/>}/>
         <Route path="/addexpense" element={<AddExpense/>}/>
         <Route path="/viewexpense/:expenseId" element={<ViewExpense/>}/>

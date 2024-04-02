@@ -16,6 +16,7 @@ const documentUploadRoutes = require('./routes/documentUploadRoutes');
 const subscriptionRoutes = require('./routes/subscriptionRoutes');
 const bodyParser=require('body-parser');
 
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use('/', userRoutes);
