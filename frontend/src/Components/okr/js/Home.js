@@ -16,14 +16,7 @@ const Home = () => {
 
   const fetchObjectives = async () => {
     try {
-      const token = localStorage.getItem("token");
-      const response = await axios.get('http://localhost:5000/okr/objectives'
-      /*, {
-        headers: {
-          "Authorization": `Bearer ${token}`
-        }
-      }*/
-      );
+      const response = await axios.get('http://localhost:5000/okr/objectives');
       setObjectives(response.data);
     } catch (error) {
       console.error('Error fetching objectives', error);
@@ -42,10 +35,6 @@ const Home = () => {
     setSearchQuery(e.target.value);
   };
 
-  const filteredObjectives = objectives.filter((objective) =>
-    objective.title.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
   return (
     <div>
       {/* Navbar */}
@@ -62,9 +51,9 @@ const Home = () => {
       <div className="home-container">
         <h2>Objectives and Key Results</h2>
         <div className="search-bar">
-        <div className="button-container">
-          <Link to="/add-objective">Add New Objective</Link>
-        </div>
+          <div className="button-container">
+            <Link to="/add-objective">Add New Objective</Link>
+          </div>
           <input
             type="text"
             placeholder="Search objectives..."
@@ -75,33 +64,33 @@ const Home = () => {
         </div>
         
         <div className="objectives-list">
-          {filteredObjectives.map((objective) => (
-            <div key={objective.id} className="objective-card">
-              <div className="objective-header" onClick={() => toggleObjective(objective.id)}>
+          {objectives.map((objective) => (
+            <div key={objective._id} className="objective-card">
+              <div className="objective-header" onClick={() => toggleObjective(objective._id)}>
                 <FontAwesomeIcon icon={faBullseye} className="goal-icon" />
                 <h3 className="objective-title">{objective.title}</h3>
-                <div className="progress-bar-container">
-                  <div className="progress-bar" style={{ width: `${objective.progress * 100}%` }}></div>
-                </div>
+                {objective.timeframe && <p className="objective-timeframe">Timeframe: {objective.timeframe}</p>}
                 <div className="expandable-icon">
-                  {expandedObjectives.includes(objective.id) ? (
+                  {expandedObjectives.includes(objective._id) ? (
                     <FontAwesomeIcon icon={faMinus} />
                   ) : (
                     <FontAwesomeIcon icon={faPlus} />
                   )}
                 </div>
               </div>
-              <ul className={`key-results-list ${expandedObjectives.includes(objective.id) ? 'expanded' : ''}`}>
-                {objective.keyResults.map((keyResult) => (
-                  <li key={keyResult.id} className="key-result-item">
-                    <FontAwesomeIcon icon={faBullseye} className="goal-icon" />
-                    <span className="key-result-title">{keyResult.title}</span>
-                    <div className="progress-bar-container">
-                      <div className="progress-bar" style={{ width: `${keyResult.progress * 100}%` }}></div>
-                    </div>
-                  </li>
-                ))}
-              </ul>
+              {expandedObjectives.includes(objective._id) && objective.keyResults && objective.keyResults.length > 0 && (
+                <ul className="key-results-list">
+                  {objective.keyResults.map((keyResult) => (
+                    <li key={keyResult._id} className="key-result-item">
+                      <FontAwesomeIcon icon={faBullseye} className="goal-icon" />
+                      <span className="key-result-title">{keyResult.title}</span>
+                      <div className="progress-bar-container">
+                        <div className="progress-bar" style={{ width: `${keyResult.progress * 100}%` }}></div>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
           ))}
         </div>

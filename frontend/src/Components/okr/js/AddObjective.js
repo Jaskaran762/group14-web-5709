@@ -17,7 +17,7 @@ const AddObjective = () => {
     if (validateForm()) {
       try {
         // Send POST request to backend to create objective
-        await axios.post('http://localhost:6000/okr/objectives', { title, timeframe });
+        await axios.post('http://localhost:5000/okr/objectives', { title, timeframe });
         setShowPopUp(true);
       } catch (error) {
         setSubmitError('Failed to add objective. Please try again.');
