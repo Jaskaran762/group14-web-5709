@@ -3,7 +3,8 @@ const Document = require('../models/documentModel');
 const mongoose = require('mongoose');
 
 const addDocument = async (req, res) => {
-    const userId = req.body.userId;
+    const user = req.user;
+    const userId = req.user.userId;
     const documentType = req.body.documentType;
     const documentDescription = req.body.documentDescription;
     const documentCategory = req.body.documentCategory;

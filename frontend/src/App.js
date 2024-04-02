@@ -21,6 +21,7 @@ import LandingPage from "./Components/landing/LandingPage";
 import Success from './Components/proversion/Success';
 import Cancel from './Components/proversion/Cancel';
 import AddDocumentForm from "./Components/document-upload/addDocument";
+import ViewDocuments from "./Components/document-upload/viewDocument";
 
 function App() {
   return (
@@ -47,6 +48,7 @@ function App() {
         <Route path="/success" element={<Success />} />
           <Route path="/cancel" element={<Cancel />} />
         <Route path="/addDocument" element={<AddDocumentForm/>}/>
+        <Route path="/viewDocuments" element={<ViewDocuments/>}/>
       </Routes>
     </div>
   );
