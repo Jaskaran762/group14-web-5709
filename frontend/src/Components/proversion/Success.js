@@ -28,7 +28,7 @@ const Success = () => {
   const handlePaymentSuccess = () => {
     const token = localStorage.getItem('token');
     console.log('Token ------- ', token);
-    fetch('http://localhost:5000/api/v1/payment-success', {
+    fetch(`${process.env.REACT_APP_BACKEND_URL}/api/v1/payment-success`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
